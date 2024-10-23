@@ -46,25 +46,31 @@ b1.grid(row=2, column=0)
 # iii. daily limit should not be exceeded
 
 def bankAccount():
-    notes_list = [200,500,2000]
+    notes_list = [100,200,500,2000]
     daily_limit_taken = 0
     note_Value = int(e3.get())
     withdrawal_amount = int(e2.get())
     if withdrawal_amount <= balance:
-        if note_Value in notes_list:
-            if daily_limit_taken < daily_limit:
-                updated_bal = balance - withdrawal_amount
-                res_place = Label(win, text=f"Available bal:{updated_bal}", fg="red")
-                res_place.grid(row=8, column=0)
-                messagebox.showinfo("Transaction Details", "Transaction Successful")
+        if withdrawal_amount >= note_Value:
+            if note_Value in notes_list:
+                if daily_limit_taken < daily_limit:
+                    updated_bal = balance - withdrawal_amount
+                    daily_limit_taken = daily_limit - withdrawal_amount
+                    res_place = Label(win, text=f"Available bal:{updated_bal}", fg="red")
+                    res_place.grid(row=8, column=0)
+                    res_place = Label(win, text=f"Available Day limit:{daily_limit_taken}", fg="green")
+                    res_place.grid(row=9, column=0)
+                    messagebox.showinfo("Transaction Details", "Transaction Successful")
+                else:
+                    res_place = Label(win, text="Day Limit exceeded", fg="red")
+                    res_place.grid(row=8, column=0)
             else:
-                res_place = Label(win, text="Day Limit exceeded", fg="red")
+                res_place = Label(win, text=f"{note_Value}Rs Notes are Not Available", fg="red")
                 res_place.grid(row=8, column=0)
         else:
-            res_place = Label(win, text=f"{note_Value}Rs Notes are Not Available", fg="red")
-            res_place.grid(row=8, column=0)
-    else:
+            messagebox.showinfo("Transaction Details","Withdraw amount is lesser than note value \n or \n Please Enter the withdrawal amount in multiples of 100's")
 
+    else:
         res_place = Label(win, text="insufficient funds", fg="red")
         res_place.grid(row=8, column=0)
 
